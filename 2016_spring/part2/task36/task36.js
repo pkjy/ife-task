@@ -1,11 +1,11 @@
 //还没能逐条执行动作。。
-(function createTable() {
+function createTable(width,height,pos) {
     var table = document.getElementById('table');
     var tr_arr = [];
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < width; i++) {
         tr_arr[i] = document.createElement("tr");
         table.appendChild(tr_arr[i]);
-        for (var j = 0; j < 11; j++) {
+        for (var j = 0; j < height; j++) {
             var td_arr = [];
             td_arr[j] = document.createElement("td");
             tr_arr[i].appendChild(td_arr[j]);
@@ -19,9 +19,8 @@
             }
         }
     }
-    document.getElementById('command_input').value = 'MOV RIG 3 \nmoV bot 3\nMOV lef 1\ntra bot 2';
-    updateLineNum()
-})();
+    return {"width":width-1,"height":height-1,"pos":pos}
+}
 
 //正则分割内容框里的内容,扩展命令，添加数字
 function enhanceCommand(str) {
@@ -29,14 +28,13 @@ function enhanceCommand(str) {
     var inputArr = str.split(filter);
     return inputArr;
 }
-
 var robot = document.getElementById('robot_box');
 var cmd_btn = document.getElementById('command_button');
 var deg = 0; //初始化角度
 var face = 0; //初始化方向  0: 上, 1: 右, 2: 下, 3: 左;
-var xPos = 50;
-var yPos = 50;
-
+var whInfo = createTable(11,21,50);
+var xPos = whInfo.pos;
+var yPos = whInfo.pos;
 var RobotBox = {
     xPos: function() {
         xPos += "px";
@@ -64,9 +62,8 @@ var RobotBox = {
             throw "啊？"
         }
     },
-    go: function(str, line_num) {
+    go: function(str) {
         var Li = document.getElementById('command_display_count').getElementsByTagName("li");
-        Li[line_num].style.borderRadius = "10px";
         switch (str) {
             case "GO":
                 switch (face) {
@@ -89,50 +86,38 @@ var RobotBox = {
                 break;
             case "TUN LEF":
                 RobotBox.turnLeft();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TUN RIG":
                 RobotBox.turnRight();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TUN BAC":
                 RobotBox.turnBack();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TRA LEF":
                 RobotBox.transLeft()
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TRA TOP":
                 RobotBox.transTop()
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TRA RIG":
                 RobotBox.transRight()
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "TRA BOT":
                 RobotBox.transBottom();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "MOV LEF":
                 RobotBox.moveLeft();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "MOV TOP":
                 RobotBox.moveTop();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "MOV RIG":
                 RobotBox.moveRight();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             case "MOV BOT":
                 RobotBox.moveBottom();
-                Li[line_num].style.backgroundColor = "#7fadda";
                 break;
             default: //处理错误的命令所对应的行数
-                Li[line_num].style.backgroundColor = "#FF9A9A";
                 break;
         }
     },
@@ -174,7 +159,7 @@ var RobotBox = {
     },
     transRight: function() {
         setTimeout(function() {
-            if (xPos < 500) {
+            if (xPos < whInfo.height*whInfo.pos) {
                 xPos += 50;
                 robot.style.left = xPos + 'px';
             }
@@ -182,7 +167,7 @@ var RobotBox = {
     },
     transBottom: function() {
         setTimeout(function() {
-            if (yPos < 500) {
+            if (yPos < whInfo.width*whInfo.pos) {
                 yPos += 50;
                 robot.style.top = yPos + 'px';
             }
@@ -192,78 +177,51 @@ var RobotBox = {
         setTimeout(function () {
             if (face != 1) { //如果方向不同
                 RobotBox.turnLeft();
-                setTimeout(arguments.callee, 50);
+                setTimeout(arguments.callee, 10);
             } else {
-                setTimeout(RobotBox.transLeft, 1000);
+                setTimeout(RobotBox.transLeft, 500);
             };
-        }, 50);
+        }, 10);
     },
     moveTop: function() {
         setTimeout(function () {
             if (face != 0) { //如果方向不同
                 RobotBox.turnLeft();
-                setTimeout(arguments.callee, 50);
+                setTimeout(arguments.callee, 10);
             } else {
-                setTimeout(RobotBox.transTop, 1000);
+                setTimeout(RobotBox.transTop, 500);
             };
-        }, 50);
+        }, 10);
     },
     moveRight: function() {
         setTimeout(function() {
             if (face != 3) { //如果方向不同
                 RobotBox.turnLeft();
-                setTimeout(arguments.callee, 50);//运用链式达到Interval的效果，arguments.callee的用法参考《高程设计》P611
+                setTimeout(arguments.callee, 10);//运用链式达到Interval的效果，arguments.callee的用法参考《高程设计》P611
             } else {
-                setTimeout(RobotBox.transRight, 1000);
+                setTimeout(RobotBox.transRight, 500);
             }
-        },50)
+        },10)
         
     },
     moveBottom: function() {
         setTimeout(function() {
             if (face != 2) { //如果方向不同
                 RobotBox.turnLeft();
-                setTimeout(arguments.callee, 50);
+                setTimeout(arguments.callee, 10);
             } else {
-                setTimeout(RobotBox.transBottom, 1000);
+                setTimeout(RobotBox.transBottom, 500);
             };
-        }, 50);
+        }, 10);
     },
 }
 
 /***********************************输入框区域的函数********************************/
 
-//创建行数标记
-function renderLineNum(count) {
-    var command_display_count = document.getElementById('command_display_count');
-    command_display_count.innerHTML = "";
-    for (var i = 1; i <= count; i++) {
-        var li = document.createElement("li");
-        var txt = document.createTextNode(i);
-        li.appendChild(txt);
-        command_display_count.appendChild(li);
-    }
-}
-
-//检测当前输入框文本的行数,实时更新lineNum
-function updateLineNum() {
-    setTimeout(
-        function activeEnter() {
-            var command_input = document.getElementById('command_input');
-            var line_num = command_input.value; //行数
-            line_num.match(/\n/g) ? renderLineNum(line_num.match(/\n/g).length + 1) : renderLineNum(1);
-        }, 0)
-}
-
-//实时设置第一个li的margin值，达到滚动的效果。
-function setMargin() {
-    var Li = document.getElementById('command_display_count').getElementsByTagName('li');
-    Li[0].style.marginTop = -command_input.scrollTop + "px";
-}
 
 //执行按钮   
 function render() {
-    var inputArr = enhanceCommand(command_input.value);
+    var inputArr = enhanceCommand('MOV RIG 1 \ntra RIG 8\nmov bot 1\nmov lef 9\nmov bot 1\nmov rig 9\nmov bot1\nmov lef 9\nmov bot1\nmov rig 9');
     var x = 0;
     (function bigLoop() {
         if (x < inputArr.length) {
@@ -284,13 +242,12 @@ function render() {
 
             function finalLoop() {
                 if (i < times) {
-                    RobotBox.go(conmmand_input.toUpperCase(), x)
-                    setTimeout(finalLoop, 1000);
-                    // console.log(conmmand_input, x, i, times)
+                    RobotBox.go(conmmand_input.toUpperCase())
+                    setTimeout(finalLoop, 500);
                     i++;
                 } else {
                     x++;
-                    setTimeout(bigLoop, 1000);
+                    setTimeout(bigLoop, 500);
                 }
             }
             finalLoop();
@@ -298,32 +255,134 @@ function render() {
     })()
 }
 
-document.getElementById('clean_buttun').addEventListener("click", function() {
-    command_input.value = "";
-    updateLineNum();
-}, false);
-document.getElementById("refresh_button").addEventListener("click",function(){location.reload()},false)
-cmd_btn.addEventListener("click", render, false);
+// document.getElementById('clean_buttun').addEventListener("click", function() {
+//     command_input.value = "";
+// }, false);
+// document.getElementById("refresh_button").addEventListener("click",function(){location.reload()},false)
+// cmd_btn.addEventListener("click", render, false);
+// document.getElementById("startDraw").onclick = function(){
+    // var speed = document.getElementById("setSpeed").value||200;
+    // var degree = document.getElementById("setNum").value||10;
+    // draw(5,Number(speed));
+// }
 
-function keyEvent(e) {
-    var oEvt = e||window.event;
-    var oObj = oEvt.target||oEvt.srcElement;
-    var currKey=e.keyCode||e.which||e.charCode;
-    switch(currKey){
-        case 37:
-        RobotBox.transLeft();
-        break;
-        case 38:
-        RobotBox.transTop();
-        break;
-        case 39:
-        RobotBox.transRight();
-        break;
-        case 40:
-        RobotBox.transBottom();
-        break;
-        default:
-        break;
+function getBlankTd(speed){
+    var temptemp = document.getElementsByTagName("td");
+    var i;
+    var count =0;
+    var needArr = [];
+    for(i=0,len=temptemp.length;i<len;i++){
+
+        if(temptemp[i].className==""){
+            needArr.push(temptemp[i])
+        }
+    }
+    setStyle(needArr,speed);
+    console.log(speed)
+}
+
+function setStyle(arr,speed){
+    var x=0;
+    var myTimeout = setTimeout(function(){
+        if(x>arr.length-1){
+            clearTimeout(myTimeout);
+            return
+        }
+        arr[x].style.visibility = "hidden";
+
+        x++;
+        setTimeout(arguments.callee,speed);
+        console.log(speed)
+    },speed)
+}
+
+/**画图*/
+
+function draw(piece,speed){
+    var canvas = document.createElement("canvas");
+    canvas.style.top =whInfo.pos+"px";
+    canvas.style.left = whInfo.pos +"px";
+    if(canvas.getContext){
+        var context = canvas.getContext("2d");
+
+        var image = document.getElementById("uploadIMG");
+
+        canvas.width = whInfo.height*whInfo.pos;
+        canvas.height =whInfo.width*whInfo.pos;
+        document.getElementById("wrap").appendChild(canvas);
+
+        context.drawImage(image,0,0);
+
+        var tempW = image.width/piece;//除以10就是每个单元格的像素
+        var tempH = image.height/piece;
+        var tempArr = [];
+        
+        var imageData = context.getImageData(0,0,image.width,image.height);
+        var data = imageData.data;
+
+        var newArr = [];
+
+        var picWidth = image.width;
+        for(var x=2;x<image.width;x+=piece){
+            for(var y=2;y<image.height;y+=piece){
+                var firstPix = coor(x,y,picWidth);
+                var secondPix = coor(x,y,picWidth)+1;
+                var thirdPix = coor(x,y,picWidth)+2;
+                var fouthPix = coor(x,y,picWidth)+3;
+
+                newArr.push({
+                    "red":data[firstPix],
+                    "green":data[secondPix],
+                    "blue":data[thirdPix],
+                    "alpha":data[fouthPix]
+                })
+            }
+        }
+        var myCount =0;
+        for(var x=0;x<image.width;x+=piece){
+            for(var y=0;y<image.height;y+=piece){
+                var color = "rgb("+newArr[myCount]["red"]+","+newArr[myCount]["green"]+","+newArr[myCount]["blue"]+")";
+                context.fillStyle= color;
+                context.fillRect(x,y,piece,piece);
+                context.fill();
+                myCount++;
+            }
+        }
+        getBlankTd(speed);
+        console.log(speed)
     }
 }
-window.onkeydown = keyEvent;
+
+function coor (x,y,picWidth){//后面的乘4忘了，嫩是让我纠结了半天
+    return (picWidth*y+x)*4
+}
+
+
+
+function createObjectURL(blob){
+    if (window.URL){
+        return window.URL.createObjectURL(blob);
+    } else if (window.webkitURL){
+        return window.webkitURL.createObjectURL(blob);
+    } else {
+        return null;
+    }
+}
+document.getElementById('file-input').addEventListener("change",function(){
+    var files = event.target.files
+    console.log(files)
+    // var reader = new FileReader();
+    var Url = createObjectURL(files[0]);
+    console.log(Url)
+    
+    // reader.readAsDataURL(files[0])
+    if(Url){
+        if(/image/.test(files[0].type)){
+            document.getElementById('preView').innerHTML = "<img id='uploadIMG' src="+Url +"\>";
+        }else{
+            alert("请上传图片")
+        }
+    }else{
+        document.getElementById('preView').innerHTML = "该浏览器不支持object URLs,请更换浏览器再尝试。"
+    }
+},false)

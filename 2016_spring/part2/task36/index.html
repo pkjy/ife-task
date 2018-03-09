@@ -10,11 +10,13 @@
         margin: 0;
         font-family: Microsoft Yahei;
     }
-    
+
     .clear_border {
         border: none;
     }
-    
+    #preView{
+        display: none;
+    }
     table {
         border-spacing: 0;
         border-collapse: collapse;
@@ -22,6 +24,7 @@
     
     li {
         list-style: none;
+        margin:20px 5px;
     }
     
     td {
@@ -31,6 +34,7 @@
         width: 50px;
         height: 50px;
         box-sizing: border-box;
+        background-color: #fff;
     }
     
     .wrapper {
@@ -42,6 +46,11 @@
         flex-shrink: 0;
     }
     
+    canvas{
+        position: absolute;
+        z-index: -1;
+    }
+
     .robot-box {
         transition: top 1s,left 1s,transform 0.9s;
         height: 50px;
@@ -92,8 +101,7 @@
     }
     
     input[type="button"] {
-        width: 50px;
-        height: 25px;
+        padding:20px;
         background-color:#6289AF;
         border:none;
         color:#fff;
@@ -108,36 +116,28 @@
 
 <body>
     <section class="wrapper">
-        <section class="table">
+        <section class="table" id="wrap">
             <table id="table"></table>
-            <div class="robot-box" id="robot_box"></div>
+            <!-- <div class="robot-box" id="robot_box"></div> -->
         </section>
-        <section class="command-part">
-            <section class="command-part-button">
+        <ul class="command-rules">
+            <li><input type="file" id="file-input" ></li>
+            <!-- <li><input type="text" id="setNum" placeholder="输入模糊程度(数字5-20)"></li> -->
+            <li><input type="text" id="setSpeed" placeholder="输入打印速度(1000=1秒)"></li>
+            <li>先上传图片再点击下方按钮。</li>
+            <li>图片像素要求100X50以上</li>
+            <li><input type="button" id="startDraw" value="开始画画" onclick="draw(10,200)"></li>
+        </ul>
+        <!-- <section class="command-part"> -->
+            <!-- <section class="command-part-button">
                 <input type="button" id="command_button" value="执行">
                 <input type="button" id="clean_buttun" value="清空">
                 <input type="button" id="refresh_button" value="刷新">
-            </section>
-            <section class="command-part-display">
-                <ul class="command-part-display-count" id="command_display_count">
-                    <li>1</li>
-                </ul>
-                <textarea id="command_input" onkeyup="updateLineNum()"></textarea>
-            </section>
-        </section>
-        <ul class="command-rules">
-            <li>支持大小写混写，但书写必需规范化。<br>PS：n如果为空，则默认为1。</li><br>
-            <li><strong>新增</strong>上下左右键输出TRA的命令</li><br>
-            <li>GO n：向当前方向前进n格</li>
-            <li>TRA LEF n：向屏幕的左侧平移 n 格</li>
-            <li>TRA TOP n：向屏幕的上面平移 n 格</li>
-            <li>TRA RIG n：向屏幕的右侧平移 n 格</li>
-            <li>TRA BOT n：向屏幕的下面平移 n 格</li>
-            <li>MOV LEF n：方向转向屏幕左侧，并向屏幕的左侧移动 n 格</li>
-            <li>MOV TOP n：方向转向屏幕上面，向屏幕的上面移动 n 格</li>
-            <li>MOV RIG n：方向转向屏幕右侧，向屏幕的右侧移动 n 格</li>
-            <li>MOV BOT n：方向转向屏幕下面，向屏幕的下面移动 n 格</li>
-        </ul>
+            </section> -->
+            <table id="preView"></table>
+            
+        <!-- </section> -->
+        
     </section>
     <script type="text/javascript" src="task36.js"></script>
 </body>
