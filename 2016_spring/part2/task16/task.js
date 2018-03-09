@@ -14,8 +14,10 @@ var aqiData = {};
  */
 function addAqiData() {
     var city = document.getElementById('aqi-city-input').value;
-    if (!city.match(/^[a-zA-Z\u4e00-\u9fa5]+$/)) {
-        alert("城市名称只接受中英文字符!");
+    // 中英混字符/^[a-zA-Z\u4e00-\u9fa5]+$/
+
+    if (!city.match(/^[A-Za-z]+$/) && !city.match(/^[\u4e00-\u9fa5]+$/)) {
+        alert("城市名称只接受中文或英文字符!");
         return false;
     }
     var value = document.getElementById('aqi-value-input').value;
@@ -67,7 +69,7 @@ var event = event || window.event;
 
     // 想办法给aqi-table中的所有删除按钮绑定事件，触发delBtnHandle函数
     //为表格绑定事件监听，if筛选出button按钮，并为button按钮添加删除函数
-    document.getElementById("aqi-table").addEventListener("click", function(e) {
+    document.getElementById("aqi-table").addEventListener("click", function (e) {
         //下两行适配FF和IE，将event作为函数的参数传入例如e，然后为参数e添加适配方法
         e = e || window.event;
         target = e.target || e.srcElement;
