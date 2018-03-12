@@ -18,7 +18,7 @@
 
 任务描述
 ---
-* 实现与设计图(点击查看)[http://7xrp04.com1.z0.glb.clouddn.com/task_1_11_1.jpg]一致的移动端Web页面
+* 实现与设计图[点击查看](http://7xrp04.com1.z0.glb.clouddn.com/task_1_11_1.jpg)一致的移动端Web页面
 
 
 任务注意事项
