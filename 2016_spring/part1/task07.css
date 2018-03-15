@@ -331,9 +331,8 @@ a {
 }
 
 .part06-left {
-    -webkit-flex: 1;
-    -ms-flex: 1;
     flex: 1;
+    display: flex; align-items: center;
 }
 
 .part06-left span {
