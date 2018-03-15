@@ -36,9 +36,9 @@
 
 在线学习参考资料
 ---
-* (《图解CSS3》)[https://book.douban.com/subject/25920727/]
-* (W3School CSS3 教程)[http://www.w3school.com.cn/css3/index.asp]
-* (MDN CSS 3)[https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS3]
+* [《图解CSS3》](https://book.douban.com/subject/25920727/)
+* [W3School CSS3 教程](http://www.w3school.com.cn/css3/index.asp)
+* [MDN CSS 3](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS3)
 
 任务链接
 ---
