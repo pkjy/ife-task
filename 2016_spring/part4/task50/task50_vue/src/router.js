@@ -8,10 +8,12 @@ const MainEdit = () => import("./components/MainEdit")
 Vue.use(Router)
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: "/",
       component: Head,
+      redirect: { name: "MainHome" },
       children: [
         { path: "/home", name: "MainHome", component: MainHome },
         { path: "/add", name: "MainAdd", component: MainAdd },
